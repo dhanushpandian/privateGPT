@@ -40,12 +40,14 @@ def main():
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever, return_source_documents= not args.hide_source)
     # Interactive questions and answers
     while True:
-        query = input("\nEnter a query: ")
+        query = input("\nEnter a query (exit to quit): ")
         if query == "exit":
             break
 
         # Get the answer from the chain
-        res = qa(query)
+        prompt="Answer the following question based on the context. If the question cannot be answered using the information provided answer with \"I don't know\". "
+
+        res = qa(prompt+query)
         answer, docs = res['result'], [] if args.hide_source else res['source_documents']
 
         # Print the result
